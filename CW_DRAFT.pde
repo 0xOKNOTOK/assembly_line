@@ -1,16 +1,16 @@
-PImage ak47_no, ak47_nomag, ak47_nostock, ak47, bg, mag, stock;
-Part[] parts;
+PImage ak47_no, ak47_nomag, ak47_nostock, ak47, bg, mag, stock; //<>//
+ArrayList<Part> parts = new ArrayList<Part>();
 boolean collision = false;
-int numberOfParts = 5;
+int numberOfParts = 5; //<>//
 int difficulty = 1;
 int score;
-float diam = 80;
+float diam = 80; //<>//
 
 class Part {
   
   public int x;
   public int y;
-  PImage partName;
+  public PImage partName;
   
   Part(int xVal, int yVal, PImage part) {
     x = xVal;
@@ -28,7 +28,8 @@ class Part {
     image(partName, x, y, 80, 80);
 
   } 
-}
+} 
+
 
 class Kolashnikov{
   boolean hasMag;
@@ -53,7 +54,7 @@ class Kolashnikov{
   }
 
   void update() {
-    //xPos+=speed;
+    xPos+=speed;
     if(xPos > width) {
      xPos = -200; 
     }
@@ -73,14 +74,13 @@ Kolashnikov kolash = new Kolashnikov(200, 400 ,2, false);
 
 
 void spawnParts(int xMin, int xMax, int yMin, int yMax, int num){
-  parts = new Part[num];
-  
-  for(int i = 0; i<parts.length; i++){ 
-    int x = int(random(xMin, xMax));
-    int y = int(random(yMin, yMax));
-    parts[i] = new Part(x, y, mag);
     
-  }
+    for(int i = 0; i<num; i++){
+        int x = int(random(xMin, xMax));
+        int y = int(random(yMin, yMax));
+        parts.add(new Part(x, y, ak47));
+      
+    }
   
 }
 
@@ -95,6 +95,7 @@ void setup() {
   ak47_nomag = loadImage("ak47_nomag.png");
   ak47_nostock = loadImage("ak47_nostock.png");
   spawnParts(0, width, 0, 0, numberOfParts);
+
 }
 
 void draw() {
@@ -102,37 +103,40 @@ void draw() {
   moveParts();
   kolash.display();
   kolash.update();
+  textSize(100);
+  text(score, width - 200, height - 200);
   
 }
 
 void moveParts(){
-  for(int i = 0; i < parts.length; i++) {
-      parts[i].display();
-      parts[i].drop(0);
+  for(int i = 0; i < parts.size(); i++) {
+      parts.get(i).display();
+      parts.get(i).drop(1);
   }
 
   
 }
 void mouseDragged() {
-  for(int i = 0; i < parts.length; i++) {
-      if (pointInCircle(mouseX, mouseY, parts[i].x, parts[i].y, diam - 20)) {
-        parts[i].x = mouseX;
-        parts[i].y = mouseY;
+  for(int i = 0; i < parts.size(); i++) {
+      if (pointInCircle(mouseX, mouseY, parts.get(i).x, parts.get(i).y, diam - 20)) {
+        parts.get(i).x = mouseX;
+        parts.get(i).y = mouseY;
         
-        if (dist(parts[i].x, parts[i].y, kolash.getXPos() + 250, kolash.getYPos() + 50) < 50) {
-          println("OK");
+        if (dist(parts.get(i).x, parts.get(i).y, kolash.getXPos() + 250, kolash.getYPos() + 50) < 20) {
+          score++;
+          parts.remove(i);
         }
-      } 
+      }
       
   }
 
-
 }
+
 
 boolean pointInCircle(float x, float y, float a, float b, float r) {
   if (dist(x, y, a, b) <= r) {
     return true;
   } else {
-    return false;
+     return false;
   }
 }
