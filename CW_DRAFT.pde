@@ -1,77 +1,61 @@
 
 PImage ak47_base, ak47_mag;
+Part[] parts;
+boolean collision = false;
+int difficulty = 10;
 
-class Part {
-  float x;
-  float y;
-  float dx;
-  float dy;
-  void display(PImage part_type) {
-     image(part_type, x, y, 100,100); 
-  }
-}
 
-class Kolashnikov{
-  float xpos;
-  float speed;
-  Kolashnikov(float x, float s) {
-    xpos = x;
-    speed = s;
-  }
+
+
+
+
+void spawnParts(int xMin, int xMax, int yMin, int yMax, int num){
+  parts = new Part[num];
   
-  void display() {
-    image(ak47_base, xpos, height/2, 390, 200);
-  }
-
-  void update() {
-    xpos+=speed;
-    if(xpos > width) {
-     xpos = 0; 
-    }
+  for(int i = 0; i<parts.length; i++){ 
+    int x = int(random(xMin, xMax));
+    int y = int(random(yMin, yMax));
+    parts[i] = new Part(x, y, 30, 15);
     
   }
- 
-};
-
-
-
   
-
-Part magazine = new Part();
-Part stock = new Part();
-Part barrel = new Part();
-Kolashnikov kolash = new Kolashnikov(0, 2);
+}
 
 
-float diam;
+
+
 
 
 void setup() {
   
   size(1280, 720);
   smooth();
-  magazine.x = 250;
-  magazine.y = 250;
-  diam = 100;
   ak47_base = loadImage("ak47.png");
   ak47_mag = loadImage("ak47_mag.png");
-  
+  spawnParts(-250, width + 20, 0, -80, difficulty);
 
   
 }
 
 void draw() {
   background(255);
-  kolash.display();
-  kolash.update();
-  magazine.display(ak47_mag);
-  stock.display(ak47_base);
-  barrel.display(ak47_mag);
+  moveWeapons();
   
   
 }
 
+void moveWeapons(){
+  for(int i = 0; i < parts.length; i++) {
+      parts[i].display();
+      parts[i].drop(random(1,15));
+    
+    
+  }
+
+  
+}
 void mouseDragged() {
+  /*
   if (pointInCircle(mouseX, mouseY, stock.x, stock.y, diam /2)) {
     stock.x = mouseX;
     stock.y = mouseY;
@@ -80,6 +64,7 @@ void mouseDragged() {
     magazine.y = mouseY;
     
   }
+  */
 }
 
 boolean pointInCircle(float x, float y, float a, float b, float r) {
