@@ -1,5 +1,4 @@
 
-
 PImage ak47_base, ak47_mag;
 
 class Part {
@@ -7,8 +6,8 @@ class Part {
   float y;
   float dx;
   float dy;
-  void display() {
-     image(ak47_mag, x, y, 100,100); 
+  void display(PImage part_type) {
+     image(part_type, x, y, 100,100); 
   }
 }
 
@@ -39,6 +38,8 @@ class Kolashnikov{
   
 
 Part magazine = new Part();
+Part stock = new Part();
+Part barrel = new Part();
 Kolashnikov kolash = new Kolashnikov(0, 2);
 
 
@@ -63,15 +64,21 @@ void draw() {
   background(255);
   kolash.display();
   kolash.update();
-  magazine.display();
+  magazine.display(ak47_mag);
+  stock.display(ak47_base);
+  barrel.display(ak47_mag);
   
   
 }
 
 void mouseDragged() {
-  if (pointInCircle(mouseX, mouseY, magazine.x, magazine.y, diam / 2)) {
+  if (pointInCircle(mouseX, mouseY, stock.x, stock.y, diam /2)) {
+    stock.x = mouseX;
+    stock.y = mouseY;
+  } else if (pointInCircle(mouseX, mouseY, magazine.x, magazine.y, diam / 2)) {
     magazine.x = mouseX;
     magazine.y = mouseY;
+    
   }
 }
 
