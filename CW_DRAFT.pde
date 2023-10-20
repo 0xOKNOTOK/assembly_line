@@ -8,19 +8,20 @@ class Part {
   float dx;
   float dy;
   void display() {
-     image(ak47_mag, x, y, 50,50); 
+     image(ak47_mag, x, y, 100,100); 
   }
 }
 
 class Kolashnikov{
-  float xpos, speed;
+  float xpos;
+  float speed;
   Kolashnikov(float x, float s) {
     xpos = x;
     speed = s;
   }
   
   void display() {
-    image(ak47_base, xpos, height/2, 200, 100);
+    image(ak47_base, xpos, height/2, 390, 200);
   }
 
   void update() {
@@ -34,21 +35,12 @@ class Kolashnikov{
 };
 
 
-class Conv {
-  float x;
-  float y;
-  float dx;
-  float dy;
-  void display() {
-    fill(0,0,0);
-     rect(0, 0, width, 30); 
-  }
-}
+
   
 
 Part magazine = new Part();
-Kolashnikov kolash = new Kolashnikov(0, 0.5);
-Conv conv = new Conv();
+Kolashnikov kolash = new Kolashnikov(0, 2);
+
 
 float diam;
 
@@ -57,13 +49,11 @@ void setup() {
   
   size(1280, 720);
   smooth();
-
   magazine.x = 250;
   magazine.y = 250;
-  diam = 50;
+  diam = 100;
   ak47_base = loadImage("ak47.png");
   ak47_mag = loadImage("ak47_mag.png");
-  conv.display();
   
 
   
