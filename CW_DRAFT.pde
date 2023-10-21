@@ -1,7 +1,7 @@
 PImage ak47_no, ak47_nomag, ak47_nostock, ak47, bg, mag, stock; //<>//
 ArrayList<Part> parts = new ArrayList<Part>();
 boolean collision = false;
-int numberOfParts = 5; //<>//
+int numberOfParts = 2; //<>//
 int difficulty = 1;
 int score;
 float diam = 80; //<>//
@@ -44,13 +44,8 @@ class Kolashnikov{
     hasMag = hasMagEquip;
   }
   
-  
-  //public int giveX() {
-    //return posX;
-  //}
   void display() {
     image(ak47_no, xPos, yPos, 390, 200);
-    ellipse(xPos + 250, yPos + 50, 50, 50);
   }
 
   void update() {
@@ -58,6 +53,11 @@ class Kolashnikov{
     if(xPos > width) {
      xPos = -200; 
     }
+  }
+  
+  void setMagEquip(){
+    hasMag = !hasMag;
+    
   }
   
   public float getXPos() {
@@ -70,15 +70,24 @@ class Kolashnikov{
 };
 
 
-Kolashnikov kolash = new Kolashnikov(200, 400 ,2, false);
+Kolashnikov kolash = new Kolashnikov(-100, 400 ,2, false);
 
 
 void spawnParts(int xMin, int xMax, int yMin, int yMax, int num){
+
     
     for(int i = 0; i<num; i++){
+        int partNum = int(random(1,3));
+        println(partNum);
         int x = int(random(xMin, xMax));
         int y = int(random(yMin, yMax));
-        parts.add(new Part(x, y, ak47));
+        if (partNum == 1){
+          parts.add(new Part(x, y, mag));
+        } else if (partNum == 2) {
+          parts.add(new Part(x, y, stock));
+          
+        }
+        
       
     }
   
@@ -125,6 +134,7 @@ void mouseDragged() {
         if (dist(parts.get(i).x, parts.get(i).y, kolash.getXPos() + 250, kolash.getYPos() + 50) < 20) {
           score++;
           parts.remove(i);
+          kolash.setMagEquip();
         }
       }
       
