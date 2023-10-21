@@ -1,5 +1,7 @@
-PImage ak47_no, ak47_nomag, ak47_nostock, ak47, bg, mag, stock; // Initialize variables for images.  //<>//
+ //<>//
 ArrayList<Part> parts = new ArrayList<Part>(); // Create an ArrayList to store all Parts objects.
+PImage[] weapons = new PImage[4];
+PImage[] partsImg = new PImage[2];
 int numberOfParts = 2; // Sets overall number of parts to be displayed during level. //<>//
 int score; // Stores the current score of the game, point added per component added to product.
  //<>//
@@ -7,12 +9,12 @@ class Part { // Decare Parts class. Used to create all component objects.
   
   private int x; // X position of Object.
   private int y; // Y position of Object
-  private PImage partName; // 
+  private PImage img; // 
   
   Part(int xVal, int yVal, PImage part) { 
     x = xVal;
     y = yVal;
-    partName = part;
+    img = part;
   }
   
   public void drop(float speed){ // method for showing the drop speed of the components. 
@@ -20,40 +22,51 @@ class Part { // Decare Parts class. Used to create all component objects.
   }
   
   public void display() { // Method for rendering the Object on screen.
-    image(partName, x, y, 80, 80); // Image with name of PImage variable.
+    image(img, x, y, 80, 80); // Image with name of PImage variable.
 
   } 
 } 
 
 
 class Kolashnikov{
+  PImage img;
   boolean hasMag;
   boolean hasStock;
   float xPos;
   float yPos;
   float speed;
-  Kolashnikov(float x, float y, float s, boolean hasMagEquip) {
+
+  Kolashnikov(PImage image, float x, float y, float s, boolean hasMagEquip, boolean hasStockEquip) {
     xPos = x;
     yPos = y;
     speed = s;
     hasMag = hasMagEquip;
+    hasStock = hasStockEquip;
+    img = image;
   }
   
-  void display() {
-    image(ak47_no, xPos, yPos, 600, 200);
+  public void display() {
+      if (hasMag == false){
+        image(weapons[0], xPos, yPos, 600, 200);
+        print("ok");
+      } else {
+        image(weapons[2], xPos, yPos, 600, 200);
+        print("wat");
+      }
   }
 
-  void update() {
+  public void update() {
     xPos+=speed;
     if(xPos > width) {
      xPos = -200; 
     }
   }
   
-  void addMag(float x, float y) {
-    image(ak47_nostock, x, y, 600, 200);
+  public void setHasMag() {
+    hasMag = !hasMag;
     
   }
+  
   
 
   
@@ -67,7 +80,7 @@ class Kolashnikov{
 };
 
 
-Kolashnikov kolash = new Kolashnikov(-100, 400 ,2, false);
+Kolashnikov kolash = new Kolashnikov(weapons[0], -100, 400 ,2, false, false);
 
 
 void spawnParts(int xMin, int xMax, int yMin, int yMax, int num){
@@ -79,9 +92,9 @@ void spawnParts(int xMin, int xMax, int yMin, int yMax, int num){
         int x = int(random(xMin, xMax));
         int y = int(random(yMin, yMax));
         if (partNum == 1){
-          parts.add(new Part(x, y, mag));
+          parts.add(new Part(x, y, partsImg[0]));
         } else if (partNum == 2) {
-          parts.add(new Part(x, y, stock));
+          parts.add(new Part(x, y, partsImg[0]));
           
         }
         
@@ -92,25 +105,26 @@ void spawnParts(int xMin, int xMax, int yMin, int yMax, int num){
 
 void setup() {
   size(1280, 720);
-  bg = loadImage("back.jpg");
+  //PImage bg = loadImage("back.jpg");
   smooth();
-  ak47 = loadImage("ak47.png");
-  mag = loadImage("ak47_mag.png");
-  stock = loadImage("ak47_stock.png");
-  ak47_no = loadImage("ak47_no.png");
-  ak47_nomag = loadImage("ak47_nomag.png");
-  ak47_nostock = loadImage("ak47_nostock.png");
+  for(int i = 0; i<weapons.length; i++) {
+    weapons[i] = loadImage("ak47_" + i + ".png");
+  }
+  for(int k = 0; k<partsImg.length; k++) {
+    partsImg[k] = loadImage("part_" + k + ".png") ;
+  }
   spawnParts(0, width, 0, 0, numberOfParts);
+
 
 }
 
 void draw() {
-  background(bg);
+  background(0,0,0);
   moveParts();
   kolash.display();
   kolash.update();
   textSize(100);
-  text(score, width - 200, height - 200);
+  text(score, width - 200, height / 3);
   
 }
 
@@ -130,7 +144,7 @@ void mouseDragged() {
         
         if (dist(parts.get(i).x, parts.get(i).y, kolash.getXPos() + 300, kolash.getYPos() + 100) < 100) {
           score++;
-          kolash.addMag(kolash.getXPos(), kolash.getYPos());
+          kolash.setHasMag();
           parts.remove(i);
 
         }
