@@ -48,10 +48,13 @@ class Kolashnikov{
   public void display() {
       if (hasMag == false){
         image(weapons[0], xPos, yPos, 600, 200);
-        print("ok");
-      } else {
+      } if (hasStock == true){
+        image(weapons[1], xPos, yPos, 600, 200);
+        
+      }
+      
+      else {
         image(weapons[2], xPos, yPos, 600, 200);
-        print("wat");
       }
   }
 
@@ -64,7 +67,10 @@ class Kolashnikov{
   
   public void setHasMag() {
     hasMag = !hasMag;
-    
+  }
+  
+  public void setHasStock() {
+   hasStock = !hasStock; 
   }
   
   
@@ -145,6 +151,7 @@ void mouseDragged() {
         if (dist(parts.get(i).x, parts.get(i).y, kolash.getXPos() + 300, kolash.getYPos() + 100) < 100) {
           score++;
           kolash.setHasMag();
+          kolash.setHasStock();
           parts.remove(i);
 
         }
