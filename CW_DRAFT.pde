@@ -1,31 +1,26 @@
-PImage ak47_no, ak47_nomag, ak47_nostock, ak47, bg, mag, stock; //<>//
-ArrayList<Part> parts = new ArrayList<Part>();
-boolean collision = false;
-int numberOfParts = 2; //<>//
-int difficulty = 1;
-int score;
-float diam = 80; //<>//
-
-class Part {
+PImage ak47_no, ak47_nomag, ak47_nostock, ak47, bg, mag, stock; // Initialize variables for images.  //<>//
+ArrayList<Part> parts = new ArrayList<Part>(); // Create an ArrayList to store all Parts objects.
+int numberOfParts = 2; // Sets overall number of parts to be displayed during level. //<>//
+int score; // Stores the current score of the game, point added per component added to product.
+ //<>//
+class Part { // Decare Parts class. Used to create all component objects.
   
-  public int x;
-  public int y;
-  public PImage partName;
+  private int x; // X position of Object.
+  private int y; // Y position of Object
+  private PImage partName; // 
   
-  Part(int xVal, int yVal, PImage part) {
+  Part(int xVal, int yVal, PImage part) { 
     x = xVal;
     y = yVal;
     partName = part;
   }
   
-  public void drop(float speed){
-    y += speed;
+  public void drop(float speed){ // method for showing the drop speed of the components. 
+    y += speed; // Increase Y variable so products fall at a set rate.
   }
   
-  public void display() {
-    fill(255, 0, 0);
-    rect(x, y, 80, 80);
-    image(partName, x, y, 80, 80);
+  public void display() { // Method for rendering the Object on screen.
+    image(partName, x, y, 80, 80); // Image with name of PImage variable.
 
   } 
 } 
@@ -45,7 +40,7 @@ class Kolashnikov{
   }
   
   void display() {
-    image(ak47_no, xPos, yPos, 390, 200);
+    image(ak47_no, xPos, yPos, 600, 200);
   }
 
   void update() {
@@ -55,10 +50,12 @@ class Kolashnikov{
     }
   }
   
-  void setMagEquip(){
-    hasMag = !hasMag;
+  void addMag(float x, float y) {
+    image(ak47_nostock, x, y, 600, 200);
     
   }
+  
+
   
   public float getXPos() {
     return xPos;
@@ -127,14 +124,15 @@ void moveParts(){
 }
 void mouseDragged() {
   for(int i = 0; i < parts.size(); i++) {
-      if (pointInCircle(mouseX, mouseY, parts.get(i).x, parts.get(i).y, diam - 20)) {
+      if (pointInCircle(mouseX, mouseY, parts.get(i).x, parts.get(i).y, 80 - 20)) {
         parts.get(i).x = mouseX;
         parts.get(i).y = mouseY;
         
-        if (dist(parts.get(i).x, parts.get(i).y, kolash.getXPos() + 250, kolash.getYPos() + 50) < 20) {
+        if (dist(parts.get(i).x, parts.get(i).y, kolash.getXPos() + 300, kolash.getYPos() + 100) < 100) {
           score++;
+          kolash.addMag(kolash.getXPos(), kolash.getYPos());
           parts.remove(i);
-          kolash.setMagEquip();
+
         }
       }
       
