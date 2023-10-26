@@ -1,17 +1,21 @@
-class Kolashnikov{
+/*
+class Gun {
+  
   PImage img;
   boolean hasMag;
   boolean hasStock;
+  boolean hasSight;
   float xPos;
   float yPos;
   float speed;
 
-  Kolashnikov(PImage image, float x, float y, float s, boolean hasMagEquip, boolean hasStockEquip) {
+  Gun(PImage image, float x, float y, float s, boolean hasMagEquip, boolean hasStockEquip, boolean hasSightEquip) {
     xPos = x;
     yPos = y;
     speed = s;
     hasMag = hasMagEquip;
     hasStock = hasStockEquip;
+    hasSight = hasSightEquip;
     img = image;
   }
   
@@ -30,21 +34,14 @@ class Kolashnikov{
     }
   }
   
-  public void setHasMag(boolean hasMag) {
-    if(!hasMag){
-      hasMag = !hasMag;
-    } if (hasMag) {
-      println("item already has mag");
-    }
+  public void setHasMag() {
+    hasMag = !hasMag;
   }
   
   public void setHasStock() {
    hasStock = !hasStock; 
   }
-  
-  
 
-  
   public float getXPos() {
     return xPos;
   }
@@ -53,3 +50,5 @@ class Kolashnikov{
   }
   
 };
+
+*/

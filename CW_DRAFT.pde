@@ -1,12 +1,12 @@
-ArrayList<Kolashnikov> weaponStack = new ArrayList<Kolashnikov>(); //<>//
+ArrayList<Kolashnikov> weaponStack = new ArrayList<Kolashnikov>(); //<>// //<>// //<>// //<>//
 ArrayList<Part> parts = new ArrayList<Part>(); // Create an ArrayList to store all Parts objects.
 PImage[] weapons = new PImage[4];
 PImage[] partsImg = new PImage[2];
 int numberOfParts = 2; // Sets overall number of parts to be displayed during level. //<>//
 int score; // Stores the current score of the game, point added per component added to product.
- //<>//
+float difficultySpeed = 2; 
 
-Kolashnikov kolash = new Kolashnikov(weapons[0], -100, 400 ,2, false, false);
+Kolashnikov kolash = new Kolashnikov(weapons[0], -100, 400 ,difficultySpeed, false, false);
 
 
 void spawnParts(int xMin, int xMax, int yMin, int yMax, int num){
@@ -16,15 +16,13 @@ void spawnParts(int xMin, int xMax, int yMin, int yMax, int num){
         int x = int(random(xMin, xMax));
         int y = int(random(yMin, yMax));
         if (partNum == 1){
-          parts.add(new Part(x, y, partsImg[0]));
+          parts.add(new Part(x, y, partsImg[0], "MAG"));
         } else if (partNum == 2) {
-          parts.add(new Part(x, y, partsImg[0]));
-          
+          parts.add(new Part(x, y, partsImg[1], "STOCK"));
+         
         }
-        
-      
     }
-  
+ 
 }
 
 void spawnWeapons(int x, int y, float speed, boolean hasMagEquip, boolean hasStockEquip, int num){
@@ -76,8 +74,10 @@ void mouseDragged() {
         
         if (dist(parts.get(i).x, parts.get(i).y, kolash.getXPos() + 300, kolash.getYPos() + 100) < 100) {
           score++;
-          kolash.setHasMag();
-          kolash.setHasStock();
+          if(parts.get(i).partName == "MAG") {
+            kolash.setHasMag(true);
+            
+          }
           parts.remove(i);
 
         }
