@@ -20,26 +20,33 @@ class Kolashnikov{
   }
 
  public void update() {
-    xPos+=speed;
+   if(hasMag && hasStock) {
+     image(weapons[3], xPos, yPos, 600, 200);
+     
+   }else if(hasMag) {
+     image(weapons[2], xPos, yPos, 600, 200);
+     println(hasMag);
+   } else if (hasStock) {
+     image(weapons[1], xPos, yPos, 600, 200);
+   } 
+   
+   xPos+=speed;
     if(xPos > width) {
      xPos = -200;
-    } else if (hasMag){
-        image(weapons[2], xPos, yPos, 600, 200);
-    } else if (hasStock) {
-        image(weapons[1], xPos, yPos, 600, 200);
     }
   }
   
-  public void setHasMag(boolean hasMag) {
+  public void setHasMag() {
     if(!hasMag){
       hasMag = !hasMag;
-    } if (hasMag) {
-      println("item already has mag");
     }
   }
   
   public void setHasStock() {
-   hasStock = !hasStock; 
+    if(!hasStock) {
+       hasStock = !hasStock; 
+    }
+
   }
   
   

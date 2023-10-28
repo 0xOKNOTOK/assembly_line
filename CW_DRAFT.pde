@@ -39,12 +39,14 @@ void setup() {
   smooth();
   for(int i = 0; i<weapons.length; i++) {
     weapons[i] = loadImage("ak47_" + i + ".png");
+    println(weapons[i]);
   }
   for(int k = 0; k<partsImg.length; k++) {
     partsImg[k] = loadImage("part_" + k + ".png") ;
   }
   spawnParts(0, width, 0, 0, numberOfParts);
   spawnWeapons(100, 500, 2, false, false, 5);
+  
 
 }
 
@@ -75,8 +77,9 @@ void mouseDragged() {
         if (dist(parts.get(i).x, parts.get(i).y, kolash.getXPos() + 300, kolash.getYPos() + 100) < 100) {
           score++;
           if(parts.get(i).partName == "MAG") {
-            kolash.setHasMag(true);
-            
+            kolash.setHasMag();
+          } else if (parts.get(i).partName == "STOCK") {
+            kolash.setHasStock();
           }
           parts.remove(i);
 
