@@ -70,7 +70,7 @@ void moveParts(){
 }
 void mouseDragged() {
   for(int i = 0; i < parts.size(); i++) {
-      if (pointInCircle(mouseX, mouseY, parts.get(i).x, parts.get(i).y, 80 - 20)) {
+      if (dist(mouseX, mouseY, parts.get(i).x, parts.get(i).y) < 60){
         parts.get(i).x = mouseX;
         parts.get(i).y = mouseY;
         
@@ -88,13 +88,4 @@ void mouseDragged() {
       
   }
 
-}
-
-
-boolean pointInCircle(float x, float y, float a, float b, float r) {
-  if (dist(x, y, a, b) <= r) {
-    return true;
-  } else {
-     return false;
-  }
 }
