@@ -1,11 +1,11 @@
-class Part { // Decare Parts class. Used to create all component objects.
+class BodyPart { // Decare Parts class. Used to create all component objects.
   
   private float x; // X position of Object.
   private float y; // Y position of Object
   private PImage img; // 
   private String partName;
   
-  Part(float xVal, float yVal, PImage part, String partType) { 
+  BodyPart(float xVal, float yVal, PImage part, String partType) { 
     x = xVal;
     y = yVal;
     img = part;
