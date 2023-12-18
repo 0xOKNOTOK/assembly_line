@@ -2,6 +2,8 @@ ArrayList<Droid> droidstack = new ArrayList<Droid>(); //<>//
 ArrayList<BodyPart> parts = new ArrayList<BodyPart>(); // Create an ArrayList to store all Parts objects.
 PImage[] droids = new PImage[4];
 PImage[] partsImg = new PImage[2];
+PImage gameBackground;
+PImage menuBackground;
 int numberOfParts = 2; // Sets overall number of parts to be displayed during level.
 int score; // Stores the current score of the game, point added per component added to product.
 float difficultySpeed = 2; //Sets the speed at which the droid crosses the screen.
@@ -36,7 +38,7 @@ void setup() {
 
   smooth();
   for (int i = 0; i<droids.length; i++) {
-    droids[i] = loadImage("ak47_" + i + ".png");
+    droids[i] = loadImage("droid_" + i + ".png");
   }
   for (int k = 0; k<partsImg.length; k++) {
     partsImg[k] = loadImage("part_" + k + ".png") ;
@@ -46,13 +48,16 @@ void setup() {
 }
 
 void draw() {
+
   switch(state) {
     case 0:
+      menuBackground = loadImage("menuBackground.jpg");
+      background(menuBackground);
       text("Droid Builder! Press any key to start!", width/2, height/2);
       break;
     case 1:
-
-      background(bg);
+      gameBackground = loadImage("gameBackground.jpg");
+      background(gameBackground);
       moveParts();
       newDroid.display();
       newDroid.update();
@@ -68,7 +73,7 @@ void draw() {
 }
 
 void keyPressed() {
-  if(key == 'n') state++;
+  if(key == ENTER) state++;
   if(state > 2 ) {
     state=0;
     
