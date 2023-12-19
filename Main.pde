@@ -1,12 +1,12 @@
 ArrayList<Droid> droidstack = new ArrayList<Droid>(); //<>//
 ArrayList<BodyPart> parts = new ArrayList<BodyPart>(); // Create an ArrayList to store all Parts objects.
-PImage[] droids = new PImage[4];
-PImage[] partsImg = new PImage[2];
+PImage[] droids = new PImage[8];
+PImage[] partsImg = new PImage[3];
 PImage gameBackground;
 PImage menuBackground;
-int numberOfParts = 2; // Sets overall number of parts to be displayed during level.
+int numberOfParts = 3; // Sets overall number of parts to be displayed during level.
 int score; // Stores the current score of the game, point added per component added to product.
-float difficultySpeed = 2; //Sets the speed at which the droid crosses the screen.
+float difficultySpeed = 3; //Sets the speed at which the droid crosses the screen.
 boolean mouseStop = false; // Stores the state of the mouse if an item is being selected.
 int state = 0; // Global state for the games screens.
 
@@ -14,41 +14,56 @@ int state = 0; // Global state for the games screens.
 class Droid{
   PImage img;
   boolean hasHead;
-  boolean hasBlaster;
+  boolean hasRightArm;
+  boolean hasLeftArm;
   float xPos;
   float yPos;
   float speed;
 
-  Droid(PImage image, float x, float y, float s, boolean hasHeadEquip, boolean hasBlasterEquip) {
+  Droid(PImage image, float x, float y, float s, boolean hasHeadEquip, boolean hasLeftArmEquip, boolean hasRightArmEquip) {
     xPos = x;
     yPos = y;
     speed = s;
     hasHead = hasHeadEquip;
-    hasBlaster = hasBlasterEquip;
+    hasRightArm = hasRightArmEquip;
+    hasLeftArm = hasLeftArmEquip;
     img = image;
   }
   
   public void display() {
-       image(droids[0], xPos, yPos, 600, 200);
+       image(droids[0], xPos, yPos, 200, 600);
   }
 
  public void update() {
-   if(hasHead && hasBlaster) {
-     image(droids[3], xPos, yPos, 600, 200);
-     
-   }else if(hasHead) {
-     image(droids[2], xPos, yPos, 600, 200);
-     println(hasHead);
-   } else if (hasBlaster) {
-     image(droids[1], xPos, yPos, 600, 200);
-   } 
+   if(hasHead && hasLeftArm && hasRightArm) {
+     image(droids[7], xPos, yPos, 200, 600);   
+   }else if(hasHead && hasLeftArm) {
+     image(droids[2], xPos, yPos, 200, 600);
+   } else if (hasHead && hasRightArm) {
+     image(droids[3], xPos, yPos, 200, 600);
+   } else if (hasLeftArm && hasRightArm) {
+     image(droids[6], xPos, yPos, 200, 600);
+   }else if (hasLeftArm) {
+     image(droids[5], xPos, yPos, 200, 600);
+   }else if (hasRightArm) {
+     image(droids[4], xPos, yPos, 200, 600);
+   }else if (hasHead) {
+     image(droids[1], xPos, yPos, 200, 600);
+   }
    
    xPos+=speed;
    
     if(xPos > width) {
-     xPos = -200;
-     hasHead = false;
-     hasBlaster = false;
+      if(hasHead == false || hasLeftArm == false || hasRightArm == false) {
+        state = 2;
+      } else {
+       xPos = -200;
+       hasHead = false;
+       hasLeftArm = false;
+       hasRightArm = false;
+       spawnParts(0, width, 0, 0, numberOfParts);
+       speed = speed + 2;
+      }
     }
   }
   
@@ -58,16 +73,18 @@ class Droid{
     }
   }
   
-  public void setHasBlaster() {
-    if(!hasBlaster) {
-       hasBlaster = !hasBlaster; 
+  public void setHasLeftArm() {
+    if(!hasLeftArm) {
+       hasLeftArm = !hasLeftArm; 
     }
-
   }
   
-  
+    public void setHasRightArm() {
+    if(!hasRightArm) {
+       hasRightArm = !hasRightArm; 
+    }
+  }
 
-  
   public float getXPos() {
     return xPos;
   }
@@ -95,44 +112,41 @@ class BodyPart { // Decare Parts class. Used to create all component objects.
   }
   
   public void display() { // Method for rendering the Object on screen.
-    image(img, x, y, 80, 80); // Image with name of PImage variable.
+    image(img, x, y, 80, 150); // Image with name of PImage variable.
   } 
 } 
 
-Droid newDroid = new Droid(droids[0], -100, 400, difficultySpeed, false, false); // Initialise a new object with class of Droid.
+Droid newDroid = new Droid(droids[0], -100, 300, difficultySpeed, false, false, false); // Initialise a new object with class of Droid.
 
 void spawnParts(int xMin, int xMax, int yMin, int yMax, int num) { // Spawn parts randomly at the top of the screen. 
   for(int i = 0; i<num; i++) {
-    int partNum = int(random(1, 3));
+    println(i);
     int x = int(random(xMin, xMax));
     int y = int(random(yMin, yMax));
-    if (partNum == 1) {
+    if (i == 0) {
       parts.add(new BodyPart(x, y, partsImg[0], "HEAD"));
-    } else if (partNum == 2) {
-      parts.add(new BodyPart(x, y, partsImg[1], "BLASTER"));
+    } else if (i == 1) {
+      parts.add(new BodyPart(x, y, partsImg[1], "ARM_RIGHT"));
+    } else if (i == 2) {
+      parts.add(new BodyPart(x, y, partsImg[2], "ARM_LEFT"));
     }
   }
 }
 
-void spawnDroids(int x, int y, float speed, boolean hasHeadEquip, boolean hasBlasterEquip, int num) {
-  for (int i=0; i<num; i++) {
-    droidstack.add(new Droid(droids[0], x, y, speed, hasHeadEquip, hasBlasterEquip));
-  }
-}
 
 void setup() {
   size(1280, 720);
-
-
   smooth();
   for (int i = 0; i<droids.length; i++) {
     droids[i] = loadImage("droid_" + i + ".png");
   }
+  
+  
   for (int k = 0; k<partsImg.length; k++) {
     partsImg[k] = loadImage("part_" + k + ".png") ;
   }
-  spawnParts(0, width, 0, 0, numberOfParts);
-  spawnDroids(100, 500, 2, false, false, 5);
+  spawnParts(0, width - 200, 0, 0, numberOfParts);
+
 }
 
 void draw() {
@@ -141,7 +155,11 @@ void draw() {
     case 0:
       menuBackground = loadImage("menuBackground.jpg");
       background(menuBackground);
-      text("Droid Builder! Press any key to start!", width/2, height/2);
+      textSize(60);
+      fill(255, 231, 22);
+      text("Droid Builder", width/2 - 170, height/2);
+      textSize(40);
+      text("Press ENTER key to start!", width/2 - 200, height/2 + 50);
       break;
     case 1:
       gameBackground = loadImage("gameBackground.jpg");
@@ -153,8 +171,13 @@ void draw() {
       text(score, width - 200, 100);
       mouseControl();
       break;
+    case 2:
+      background(0,0,0);
+      textSize(60);
+      text("GAME OVER!", width/2 - 200, height/2);
+      text("YOU SCORED " + score, width / 2 - 220, height/2 + 70);
+      
      default:
-       println("INTENRAL GAME ERROR");
        break;
   }
   
@@ -183,12 +206,14 @@ void mouseControl() {
         mouseStop = true;
         parts.get(i).x = mouseX;
         parts.get(i).y = mouseY;
-        if (dist(parts.get(i).x, parts.get(i).y, newDroid.getXPos() + 300, newDroid.getYPos() + 100) < 100) {
+        if (dist(parts.get(i).x, parts.get(i).y, newDroid.getXPos(), newDroid.getYPos() + 100) < 100) {
           score++;
           if (parts.get(i).partName == "HEAD") {
             newDroid.setHasHead();
-          } else if (parts.get(i).partName == "BLASTER") {
-            newDroid.setHasBlaster();
+          } else if (parts.get(i).partName == "ARM_LEFT") {
+            newDroid.setHasLeftArm();
+          } else if (parts.get(i).partName == "ARM_RIGHT") {
+            newDroid.setHasRightArm();
           }
           parts.remove(i);
         }
