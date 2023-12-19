@@ -10,8 +10,96 @@ float difficultySpeed = 2; //Sets the speed at which the droid crosses the scree
 boolean mouseStop = false; // Stores the state of the mouse if an item is being selected.
 int state = 0; // Global state for the games screens.
 
-Droid newDroid = new Droid(droids[0], -100, 400, difficultySpeed, false, false); // Initialise a new object with class of Droid.
 
+class Droid{
+  PImage img;
+  boolean hasHead;
+  boolean hasBlaster;
+  float xPos;
+  float yPos;
+  float speed;
+
+  Droid(PImage image, float x, float y, float s, boolean hasHeadEquip, boolean hasBlasterEquip) {
+    xPos = x;
+    yPos = y;
+    speed = s;
+    hasHead = hasHeadEquip;
+    hasBlaster = hasBlasterEquip;
+    img = image;
+  }
+  
+  public void display() {
+       image(droids[0], xPos, yPos, 600, 200);
+  }
+
+ public void update() {
+   if(hasHead && hasBlaster) {
+     image(droids[3], xPos, yPos, 600, 200);
+     
+   }else if(hasHead) {
+     image(droids[2], xPos, yPos, 600, 200);
+     println(hasHead);
+   } else if (hasBlaster) {
+     image(droids[1], xPos, yPos, 600, 200);
+   } 
+   
+   xPos+=speed;
+   
+    if(xPos > width) {
+     xPos = -200;
+     hasHead = false;
+     hasBlaster = false;
+    }
+  }
+  
+  public void setHasHead() {
+    if(!hasHead){
+      hasHead = !hasHead;
+    }
+  }
+  
+  public void setHasBlaster() {
+    if(!hasBlaster) {
+       hasBlaster = !hasBlaster; 
+    }
+
+  }
+  
+  
+
+  
+  public float getXPos() {
+    return xPos;
+  }
+  public float getYPos() {
+    return yPos;
+  }
+  
+};
+class BodyPart { // Decare Parts class. Used to create all component objects.
+  
+  private float x; // X position of Object.
+  private float y; // Y position of Object
+  private PImage img; // 
+  private String partName;
+  
+  BodyPart(float xVal, float yVal, PImage part, String partType) { 
+    x = xVal;
+    y = yVal;
+    img = part;
+    partName = partType;
+  }
+  
+  public void drop(float speed){ // method for showing the drop speed of the components. 
+    y += speed; // Increase Y variable so products fall at a set rate.
+  }
+  
+  public void display() { // Method for rendering the Object on screen.
+    image(img, x, y, 80, 80); // Image with name of PImage variable.
+  } 
+} 
+
+Droid newDroid = new Droid(droids[0], -100, 400, difficultySpeed, false, false); // Initialise a new object with class of Droid.
 
 void spawnParts(int xMin, int xMax, int yMin, int yMax, int num) { // Spawn parts randomly at the top of the screen. 
   for(int i = 0; i<num; i++) {
